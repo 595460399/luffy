@@ -185,7 +185,7 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'utils.exception.common_exception_handler',
 }
 
-AUTH_USER_MODEL = 'user.user'
+AUTH_USER_MODEL = 'user.User'
 
 ## media的配置
 MEDIA_URL = '/media/'
