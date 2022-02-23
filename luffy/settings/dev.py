@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'simpleui',
     'user',
     'home'
 ]
@@ -48,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'luffy.urls'
@@ -73,11 +76,19 @@ WSGI_APPLICATION = 'luffy.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
+res = os.getenv('DB_PWD', 'luffy')
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'luffy',  # 库名字
+        'HOST': '192.168.100.114',
+        'USER': 'luffy',
+        'PASSWORD': res,  # 明文在这
+        'PORT': 3306,
     }
 }
 
@@ -169,6 +180,68 @@ LOGGING = {
     }
 }
 
+# 配置在配置文件中
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'utils.exception.common_exception_handler',
+}
+
+AUTH_USER_MODEL = 'user.user'
+
 ## media的配置
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+import time
+
+SIMPLEUI_CONFIG = {
+    'system_keep': False,
+    'menu_display': ['我的项目', '权限认证', '主页', ],  # 开启排序和过滤功能, 不填此字段为默认排序和全部显示, 空列表[] 为全部不显示.
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menus': [
+        {
+            'name': '我的项目',
+            'icon': 'fab fa-apple',
+            'url': '/backend/'  # 咱们用自己的
+        },
+        {
+            'app': 'auth',
+            'name': '权限认证',
+            'icon': 'fas fa-user-shield',
+            'models': [
+                {
+                    'name': '用户',
+                    'icon': 'fa fa-user',
+                    'url': 'auth/user/'
+                },
+                {
+                    'name': '组',
+                    'icon': 'fa fa-user',
+                    'url': 'auth/group/'
+                },
+                {
+                    'name': '权限',
+                    'icon': 'fa fa-user',
+                    'url': 'auth/permission/'
+                }
+            ]
+        },
+        {
+            'app': 'home',
+            'name': '主页',
+            'icon': 'fas fa-user-shield',
+            'models': [
+                {
+                    'name': '轮播图',
+                    'icon': 'fa fa-user',
+                    'url': 'home/banner/'
+                },
+
+            ]
+        },
+    ]
+}
+
+# SIMPLEUI_LOGIN_PARTICLES = False
+SIMPLEUI_HOME_INFO = False
+# 首页轮播图显示的张数
+BANNER_COUNT = 2
