@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import sys
+from .common_settings import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -183,6 +184,9 @@ LOGGING = {
 # 配置在配置文件中
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'utils.exception.common_exception_handler',
+    'DEFAULT_RENDERER_CLASSES': (  # 默认响应渲染类
+        'rest_framework.renderers.JSONRenderer',  # json渲染器
+    )
 }
 
 AUTH_USER_MODEL = 'user.User'

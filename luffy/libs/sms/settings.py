@@ -1,0 +1,7 @@
+APP_ID = ''
+APP_KEY = ''
+TEMPLATE_ID = ''
+SMS_SIGN = ''
+
+SECRET_ID = ''
+SECRET_KEY = ''
